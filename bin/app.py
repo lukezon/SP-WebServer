@@ -13,15 +13,15 @@ sqlconn = sqlite3.connect(':memory:', check_same_thread=False)
 c = sqlconn.cursor()
 c.execute("""CREATE TABLE controlvalues (
             iot_id integer NOT NULL PRIMARY KEY,
-            ir_stat integer,
-            ir_values blob)""")
+            command_data blob)""")
 sqlconn.commit()
 
 #SQL functions Setup
-def SQL_add(ID = "NULL", value1 = "NULL", value2 = "NULL"):
+def SQL_add(ID, commands):
 	try:
-		data = (ID, value1, value2)
-		c.execute("INSERT INTO controlvalues (iot_id, ir_stat, ir_values) VALUES (?, ?, ?)", data)
+		commands = "aaaaa" + str(commands)
+		data = (ID, commands)
+		c.execute("INSERT INTO controlvalues (iot_id, command_data) VALUES (?, ?)", data)
 		pass
 	except:
 		print "error occured"
@@ -52,18 +52,17 @@ class index(object):
 
 class sqladd(object):
 	def GET(self):
-		form = web.input(iot_id=None,ir_stat=None,ir_values=None)
-		if form.iot_id and form.ir_stat and form.ir_values:
+		form = web.input(iot_id=None,commands=None)
+		if form.iot_id and form.commands:
 			#defines variables to be used from webform
 			iot_id = str(form.iot_id)
-			ir_stat = str(form.ir_stat)
-			ir_values = str(form.ir_values)
-			SQL_add(iot_id, ir_stat, ir_values)
+			commands = str(form.commands)
+			SQL_add(iot_id, commands)
 			c.execute("SELECT * FROM controlvalues")
 			tablereturn = str(c.fetchall())
-			return render.sqladd(error = None, iot_id = iot_id, ir_stat = ir_stat, ir_values = ir_values, tablereturn = tablereturn)
+			return render.sqladd(error = None, iot_id = iot_id, commands = commands, tablereturn = tablereturn)
 		else:
-			return render.sqladd(error = "yes", iot_id = None, ir_stat = None, ir_values = None, tablereturn = None)
+			return render.sqladd(error = "yes", iot_id = None, commands = None, tablereturn = None)
 
 class sqlreq(object):
 	def GET(self):
@@ -80,10 +79,7 @@ class sqldel(object):
 			SQL_del(str(form.iot_id))
 			return ""
 		else:
-			return "please input IOT_id ex: /sqladd?iot_id=2&ir_stat=1&ir_values=hello223"
-
-
-
+			return "please input IOT_id ex: /sqladd?iot_id=2&commands=hello223"
 
 
 

@@ -1,4 +1,4 @@
-$def with (iot_id, ir_stat, ir_values, error, tablereturn)
+$def with (iot_id, commands, error, tablereturn)
 
 <html>
     <head>
@@ -11,14 +11,12 @@ Successfully Added the following data:
 <table style="width:100%">
   <tr>
     <th>iot_id</th>
-    <th>ir_stat</th> 
-    <th>ir_values</th>
+    <th>commands</th> 
   </tr>
-$if iot_id and ir_stat and ir_values:
+$if iot_id and commands:
   	<tr>
     	<td>$iot_id</td>
-    	<td>$ir_stat</td>
-    	<td>$ir_values</td>
+    	<td>$commands</td>
   	</tr>
 </table>
 $if tablereturn:

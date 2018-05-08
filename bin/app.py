@@ -19,7 +19,7 @@ sqlconn.commit()
 #SQL functions Setup
 def SQL_add(ID, commands):
 	try:
-		commands = "aaaaa" + str(commands)
+		commands = str(commands)
 		data = (ID, commands)
 		c.execute("INSERT INTO controlvalues (iot_id, command_data) VALUES (?, ?)", data)
 		pass
@@ -66,9 +66,12 @@ class sqladd(object):
 
 class sqlreq(object):
 	def GET(self):
-		form = web.input(iot_id = None)
+		form = web.input(iot_id = None, delete = False)
 		if form.iot_id:
-			return SQL_req(str(form.iot_id))
+			SQL_data_return = SQL_req(str(form.iot_id))
+			if form.delete == "True":
+				SQL_del(str(form.iot_id))
+			return SQL_data_return
 		else:
 			return "please provide an IOT_id number to complete your request"
 
